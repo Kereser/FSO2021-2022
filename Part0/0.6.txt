@@ -1,0 +1,11 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over server:
+Server created the notes and 
+returns the note to browser.
+end note
+server-->browser: {content: "Note content", date: "2022-01-29T16:33:28.164Z"}
+
+note over browser:
+Browser re renders the list 
+to show the new note.
+end note
