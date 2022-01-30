@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 
 const Statistics = ({ text, value }) => {
   return (
-    <p>{text} {value}</p>
+    <tbody>
+      <tr>
+        <td>{text}</td>
+        <td>{value}</td>
+      </tr>
+    </tbody>
   )
 }
 
@@ -26,6 +31,7 @@ const App = () => {
 
   console.log(good, neutral, bad);
   const total = good + neutral + bad
+  
 
   return (
     <div>
@@ -37,14 +43,14 @@ const App = () => {
       {total === 0
         ? 'No feedback given.'
         :
-        <>
+        <table>
           <Statistics text='Good' value={good} />
           <Statistics text='Neutral' value={neutral} />
           <Statistics text='Bad' value={bad} />
           <Statistics text='All' value={total} />
-          <Statistics text='Average' value={(good - bad) / total} />
-          <Statistics text='Positive' value={(good / total) * 100} />
-        </>
+          <Statistics text='Average' value={Number(((good - bad) / total)).toFixed(2)} />
+          <Statistics text='Positive' value={`${Number(((good / total) * 100)).toFixed(1)}%`} />
+        </table>
       }
 
     </div>
