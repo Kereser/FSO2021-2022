@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,15 +12,14 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(({ data }) => {
-        console.log(data)
-        setPersons(data)
+    personService
+      .getAll()
+      .then(initialPhonebook => {
+        console.log(initialPhonebook)
+        setPersons(initialPhonebook)
       })
   }, [])
 
-  const handleChange = e => setNewName(e.target.value)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -29,21 +29,31 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     }
+
     else {
       const newPerson = {
         name: newName,
         number: newNumber,
         id: persons.length + 1
       }
-      setPersons(persons.concat(newPerson))
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+        })
       setNewName('')
       setNewNumber('')
     }
   }
 
+
+  const handleNameChange = e => setNewName(e.target.value)
+
   const handleNumberChange = e => setNewNumber(e.target.value)
 
   const handleFilterChange = e => setFilter(e.target.value)
+  
+
 
 
   const personsToShow = persons.filter(pers => {
@@ -58,7 +68,7 @@ const App = () => {
       <h2>Add a new one</h2>
       <PersonForm
         funcSubmit={handleSubmit}
-        funcChangeName={handleChange}
+        funcChangeName={handleNameChange}
         funcChangeNumber={handleNumberChange}
         newName={newName}
         newNumber={newNumber}
