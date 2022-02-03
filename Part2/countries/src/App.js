@@ -14,9 +14,6 @@ function App() {
       .get('https://restcountries.com/v3.1/all')
       .then(({ data }) => {
         setCountries(data)
-        const names = data.map(el => el.name.common)
-        console.log(names)
-        console.log(data)
       }) 
   }, [])
 
@@ -31,9 +28,12 @@ function App() {
       </header>
         {
           countriesToShow.length > 10 
-          ? <p>You have to make your filter more specific</p>
+          ? <p>Too many countries. Make a more specific filter </p>
           : countriesToShow.length === 1 
-          ? <CountryInfo country={countriesToShow[0]} /> 
+          ? <CountryInfo 
+              country={countriesToShow[0]} 
+              showCountry={true}
+            /> 
           :
           <Countries countries={countriesToShow} />
         }

@@ -1,14 +1,21 @@
 import React from "react";
+import CountryInfo from "./CountryInfo";
 
 const Countries = ({ countries }) => {
+
   return (
-    <ul>
+    <>
       {
         countries.map(country => {
-          return <li key={country.name.common}>{country.name.common}</li>
+          return (
+            <CountryInfo 
+              key={country.name.common} 
+              country={country} 
+            />
+          )
         })
       }
-    </ul>
+    </>
   )
 }
 
