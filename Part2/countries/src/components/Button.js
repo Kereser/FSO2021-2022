@@ -8,7 +8,11 @@ const Button = ({ setShow, show }) => {
 
   const buttonTitle = show ? 'Hide' : 'Show'
 
-  return <button onClick={handleClick}>{buttonTitle}</button>
+  return (
+    <div>
+      <button onClick={handleClick}>{buttonTitle}</button>
+    </div>
+  )
 }
 
 export default Button

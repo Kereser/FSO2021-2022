@@ -1,5 +1,5 @@
 import React from "react";
-import CountryInfo from "./CountryInfo";
+import Country from "./Country";
 
 const Countries = ({ countries }) => {
 
@@ -8,7 +8,7 @@ const Countries = ({ countries }) => {
       {
         countries.map(country => {
           return (
-            <CountryInfo 
+            <Country
               key={country.name.common} 
               country={country} 
             />
