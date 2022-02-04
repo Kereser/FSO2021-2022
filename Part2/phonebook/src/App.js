@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 import personService from './services/persons'
 
@@ -10,6 +11,10 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState({
+    message: null,
+    class: null
+  })
 
   useEffect(() => {
     personService
@@ -42,6 +47,21 @@ const App = () => {
               return pers.name === newName ? updatedPerson : pers
             }))
           })
+          .catch(err => {
+            setPersons(persons.filter(pers => {
+              return pers.name !== newName
+            }))
+            setMessage({
+              message: `${newName} was already remove from server`,
+              class: 'failed'
+            })
+            setTimeout(() => {
+              setMessage({
+                message: null,
+                class: null
+              })
+            }, 5000);
+          })
       }
       setNewName('')
       setNewNumber('')
@@ -52,6 +72,13 @@ const App = () => {
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setMessage({
+            message: `Added ${newName} to the phonebook`,
+            class: 'success'
+          })
+          setTimeout(() => {
+            setMessage({message: null, class: null})
+          }, 5000)
         })
       setNewName('')
       setNewNumber('')
@@ -85,6 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} func={handleFilterChange} />
       <h2>Add a new one</h2>
       <PersonForm
