@@ -15,7 +15,6 @@ const App = () => {
     personService
       .getAll()
       .then(initialPhonebook => {
-        console.log(initialPhonebook)
         setPersons(initialPhonebook)
       })
   }, [])
@@ -24,18 +23,31 @@ const App = () => {
   const handleSubmit = e => {
     e.preventDefault()
 
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+    }
+
     if (persons.some(pers => pers.name === newName)) {
-      alert(`${newName} is already added.`)
+
+      const result = window.confirm(`${newName} is already added to phonebook. Do you want to replace the old number with the new one?`)
+
+      const [ person ] = persons.filter(pers => pers.name === newName)
+
+      if(result){
+        personService
+          .update(person.id, newPerson)
+          .then(updatedPerson => {
+            setPersons(persons.map(pers => {
+              return pers.name === newName ? updatedPerson : pers
+            }))
+          })
+      }
       setNewName('')
       setNewNumber('')
     }
 
     else {
-      const newPerson = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      }
       personService
         .create(newPerson)
         .then(returnedPerson => {
@@ -52,8 +64,17 @@ const App = () => {
   const handleNumberChange = e => setNewNumber(e.target.value)
 
   const handleFilterChange = e => setFilter(e.target.value)
-  
 
+  const handleDelete = (id, name) => {
+    const result = window.confirm(`Are you sure you want to delete ${name} from the phonebook?`)
+    if (result) {
+      personService
+        .erase(id)
+        .then(res => {
+          setPersons(persons.filter(pers => pers.id !== id))
+        })
+    }
+  }
 
 
   const personsToShow = persons.filter(pers => {
@@ -74,7 +95,10 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons
+        persons={personsToShow}
+        handleDelete={handleDelete}
+      />
     </div>
   )
 }
