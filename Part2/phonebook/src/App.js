@@ -37,9 +37,9 @@ const App = () => {
 
       const result = window.confirm(`${newName} is already added to phonebook. Do you want to replace the old number with the new one?`)
 
-      const [ person ] = persons.filter(pers => pers.name === newName)
+      const [person] = persons.filter(pers => pers.name === newName)
 
-      if(result){
+      if (result) {
         personService
           .update(person.id, newPerson)
           .then(updatedPerson => {
@@ -48,11 +48,8 @@ const App = () => {
             }))
           })
           .catch(err => {
-            setPersons(persons.filter(pers => {
-              return pers.name !== newName
-            }))
             setMessage({
-              message: `${newName} was already remove from server`,
+              message: err.response.data.error,
               class: 'failed'
             })
             setTimeout(() => {
@@ -60,7 +57,7 @@ const App = () => {
                 message: null,
                 class: null
               })
-            }, 5000);
+            }, 5000)
           })
       }
       setNewName('')
@@ -77,7 +74,16 @@ const App = () => {
             class: 'success'
           })
           setTimeout(() => {
-            setMessage({message: null, class: null})
+            setMessage({ message: null, class: null })
+          }, 5000)
+        })
+        .catch(err => {
+          setMessage({
+            message: err.response.data.error,
+            class: 'failed'
+          })
+          setTimeout(() => {
+            setMessage({ message: null, class: null })
           }, 5000)
         })
       setNewName('')
