@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  Routes, Route, Link, useMatch, useNavigate, Navigate
+  Routes, Route, Link, useMatch, useNavigate
 } from 'react-router-dom'
 
 const AnecdoteList = ({ anecdotes }) => (
