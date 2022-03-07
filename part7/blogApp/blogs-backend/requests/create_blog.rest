@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlN1cGVyMSIsImlkIjoiNjIwODk0N2Q0N2QxNTE5MzdjYjZiMzRkIiwiaWF0IjoxNjQ0NzkzMTY5fQ.Q4Erbzs3QTi41xmoAg0RG7Wh4L0LgTQEgPJ724Omomc
+
+{
+  "title": "Here is here",
+  "url": "http://Here.com.co",
+  "likes": 4,
+  "author": "James brown"
+}

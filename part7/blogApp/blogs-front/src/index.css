@@ -1,0 +1,17 @@
+.failed {
+  font-size: 25px;
+  color: #000;
+  font-family: cursive;
+  border: 3px solid red;
+  border-radius: 6px;
+  background: #ddd;
+}
+
+.success {
+  font-size: 25px;
+  color: #000;
+  font-family: cursive;
+  border: 3px solid green;
+  border-radius: 6px;
+  background: #ddd;
+}
