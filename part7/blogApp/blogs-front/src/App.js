@@ -10,7 +10,10 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({ message: null, state: null })
+  const [notification, setNotification] = useState({
+    message: null,
+    state: null,
+  })
 
   useEffect(() => {
     async function fetchedData() {
@@ -33,7 +36,7 @@ const App = () => {
     }
   }, [])
 
-  const newLoggin = async newUser => {
+  const newLoggin = async (newUser) => {
     try {
       const user = await loginService.login(newUser)
       setUser(user)
@@ -41,7 +44,10 @@ const App = () => {
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch (exception) {
-      setNotification({ message: 'Wrong username or password', state: 'failed' })
+      setNotification({
+        message: 'Wrong username or password',
+        state: 'failed',
+      })
       setTimeout(() => {
         setNotification({ message: null, state: null })
       }, 5000)
@@ -55,7 +61,7 @@ const App = () => {
 
   const createBlogRef = useRef()
 
-  const addNewBlog = async newBlog => {
+  const addNewBlog = async (newBlog) => {
     try {
       createBlogRef.current.toggleVisible()
       const createdBlog = await blogService.createBlog(newBlog)
@@ -74,7 +80,7 @@ const App = () => {
       console.error(exception)
       setNotification({
         message: 'Blog could not be created.',
-        state: 'failed'
+        state: 'failed',
       })
       setTimeout(() => {
         setNotification({
@@ -88,8 +94,9 @@ const App = () => {
   const updateBlog = async (id, newBlog) => {
     try {
       const updatedBlog = blogService.updateBlog(id, newBlog)
-      const newBlogs = blogs.map(b =>
-        b.id === updatedBlog.id ? updatedBlog : b)
+      const newBlogs = blogs.map((b) =>
+        b.id === updatedBlog.id ? updatedBlog : b,
+      )
       setBlogs(newBlogs)
     } catch (exception) {
       console.error('There were an error in updatingBlog.')
@@ -104,7 +111,7 @@ const App = () => {
     try {
       const token = blogService.setToken(sendedToken)
       await blogService.removeBlog(id, token)
-      const newBlogs = blogs.filter(b => {
+      const newBlogs = blogs.filter((b) => {
         return b.id !== id
       })
       setBlogs(newBlogs)
@@ -116,30 +123,26 @@ const App = () => {
   return (
     <div>
       <Notification notification={notification} />
-      {
-        user === null
-          ?
-          <div>
-            <LoginForm
-              newLoggin={newLoggin}
-            />
-          </div>
-          :
-          <div>
-            <h2>blogs</h2>
-            <p>{user.name} logged in <button onClick={handleLogOut}>Logout</button></p>
-            <Toggleable ref={createBlogRef}>
-              <CreateBlog
-                createBlog={addNewBlog}
-              />
-            </Toggleable>
-            <Blogs
-              blogs={blogs}
-              updateBlog={updateBlog}
-              removeBlog={removeBlog}
-            />
-          </div>
-      }
+      {user === null ? (
+        <div>
+          <LoginForm newLoggin={newLoggin} />
+        </div>
+      ) : (
+        <div>
+          <h2>blogs</h2>
+          <p>
+            {user.name} logged in <button onClick={handleLogOut}>Logout</button>
+          </p>
+          <Toggleable ref={createBlogRef}>
+            <CreateBlog createBlog={addNewBlog} />
+          </Toggleable>
+          <Blogs
+            blogs={blogs}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
+          />
+        </div>
+      )}
     </div>
   )
 }

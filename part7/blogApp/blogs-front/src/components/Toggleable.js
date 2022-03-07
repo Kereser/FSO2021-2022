@@ -12,7 +12,7 @@ const Toggleable = React.forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => {
     return {
-      toggleVisible
+      toggleVisible,
     }
   })
 

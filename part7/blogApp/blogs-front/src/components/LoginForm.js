@@ -5,7 +5,7 @@ const LoginForm = ({ newLoggin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     const newUser = {
@@ -25,8 +25,8 @@ const LoginForm = ({ newLoggin }) => {
         <div>
           Username:
           <input
-            id='input-username'
-            type='text'
+            id="input-username"
+            type="text"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -34,8 +34,8 @@ const LoginForm = ({ newLoggin }) => {
         <div>
           Password:
           <input
-            id='input-password'
-            type='password'
+            id="input-password"
+            type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
@@ -47,7 +47,7 @@ const LoginForm = ({ newLoggin }) => {
 }
 
 LoginForm.prototype = {
-  newLoggin: PropTypes.func.isRequired
+  newLoggin: PropTypes.func.isRequired,
 }
 
 export default LoginForm

@@ -2,18 +2,17 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 const CreateBlog = ({ createBlog }) => {
-
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     const newBlog = {
       title,
       author,
-      url
+      url,
     }
 
     createBlog(newBlog)
@@ -29,8 +28,8 @@ const CreateBlog = ({ createBlog }) => {
         <div>
           Title:
           <input
-            id='input-title'
-            type='text'
+            id="input-title"
+            type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
@@ -38,8 +37,8 @@ const CreateBlog = ({ createBlog }) => {
         <div>
           Author:
           <input
-            id='input-author'
-            type='text'
+            id="input-author"
+            type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
@@ -47,20 +46,22 @@ const CreateBlog = ({ createBlog }) => {
         <div>
           Url:
           <input
-            id='input-url'
-            type='text'
+            id="input-url"
+            type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id='button-createNote' type="Submit">Create</button>
+        <button id="button-createNote" type="Submit">
+          Create
+        </button>
       </form>
     </div>
   )
 }
 
 CreateBlog.prototype = {
-  createBlog: PropTypes.func.isRequired
+  createBlog: PropTypes.func.isRequired,
 }
 
 export default CreateBlog

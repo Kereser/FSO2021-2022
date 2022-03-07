@@ -6,9 +6,7 @@ import CreateBlog from './CreateBlog'
 test('Calling createBlog', () => {
   const createBlogMock = jest.fn()
 
-  const component = render(
-    <CreateBlog createBlog={createBlogMock} />
-  )
+  const component = render(<CreateBlog createBlog={createBlogMock} />)
 
   const inputTitle = component.container.querySelector('#input-title')
   const inputAuthor = component.container.querySelector('#input-author')
@@ -16,15 +14,15 @@ test('Calling createBlog', () => {
   const form = component.container.querySelector('form')
 
   fireEvent.change(inputTitle, {
-    target: { value: 'Creating a note with fireEvent' }
+    target: { value: 'Creating a note with fireEvent' },
   })
 
   fireEvent.change(inputAuthor, {
-    target: { value: 'fireEvent' }
+    target: { value: 'fireEvent' },
   })
 
   fireEvent.change(inputUrl, {
-    target: { value: 'https://SoylaURL.com.co' }
+    target: { value: 'https://SoylaURL.com.co' },
   })
 
   fireEvent.submit(form)
@@ -33,6 +31,6 @@ test('Calling createBlog', () => {
   expect(createBlogMock.mock.calls[0][0]).toEqual({
     title: 'Creating a note with fireEvent',
     author: 'fireEvent',
-    url: 'https://SoylaURL.com.co'
+    url: 'https://SoylaURL.com.co',
   })
 })
