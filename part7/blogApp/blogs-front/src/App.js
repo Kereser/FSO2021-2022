@@ -38,10 +38,7 @@ const App = () => {
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch (exception) {
-      dispatch(setNot('Wrong username or password', 'failed'))
-      setTimeout(() => {
-        dispatch(setNot(null, null))
-      }, 5000)
+      dispatch(setNot('Wrong username or password', 'failed', 5))
     }
   }
 
@@ -55,23 +52,17 @@ const App = () => {
   const addNewBlog = async (newBlog) => {
     try {
       createBlogRef.current.toggleVisible()
-      const createdBlog = await blogService.createBlog(newBlog)
-      dispatch(addBlog(createdBlog))
+      dispatch(addBlog(newBlog))
       dispatch(
         setNot(
           `Blog '${newBlog.title}' by '${newBlog.author}' successfully created`,
           'success',
+          5,
         ),
       )
-      setTimeout(() => {
-        dispatch(setNot(null, null))
-      }, 5000)
     } catch (exception) {
       console.error(exception)
-      dispatch(setNot('Blog could not be created.', 'failed'))
-      setTimeout(() => {
-        dispatch(setNot(null, null))
-      }, 5000)
+      dispatch(setNot('Blog could not be created.', 'failed', 5))
     }
   }
 
@@ -80,7 +71,7 @@ const App = () => {
       dispatch(upToDateBlogs(id, newBlog))
     } catch (exception) {
       console.error('There were an error in updatingBlog.')
-      dispatch(setNot('We could not update the blog.', 'failed'))
+      dispatch(setNot('We could not update the blog.', 'failed', 5))
     }
   }
 

@@ -12,10 +12,21 @@ const notificationReducer = createSlice({
 
 export const { setNotification } = notificationReducer.actions
 
-export const setNot = (message, state) => {
+let timeOutID = undefined
+export const setNot = (message, state, time) => {
   return (dispatch) => {
     const newNotification = { message, state }
     dispatch(setNotification(newNotification))
+    if (timeOutID === undefined) {
+      timeOutID = setTimeout(() => {
+        dispatch(setNotification({ message: null, state: null }))
+      }, time * 1000)
+    } else {
+      clearTimeout(timeOutID)
+      timeOutID = setTimeout(() => {
+        dispatch(setNotification({ message: null, state: null }))
+      }, time * 1000)
+    }
   }
 }
 

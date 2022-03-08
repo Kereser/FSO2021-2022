@@ -14,6 +14,8 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   }
 
   const eliminationButton = () => {
+    console.log(user)
+    console.log(blog)
     if (user.username === blog.user.username) {
       return <button onClick={handleElimination}>Remove blog</button>
     }
