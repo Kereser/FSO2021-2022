@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import Notification from './components/Notifications'
 import LoginForm from './components/LoginForm'
@@ -7,31 +7,26 @@ import CreateBlog from './components/CreateBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { setNot } from './reducers/notificationReducer'
+import { addBlog, initializeBlogs, upToDateBlogs } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
+
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({
-    message: null,
-    state: null,
-  })
+  const dispatch = useDispatch()
+  const notification = useSelector((state) => state.notification)
+  const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
-    async function fetchedData() {
-      try {
-        const blogs = await blogService.getAll()
-        setBlogs(blogs)
-      } catch (exception) {
-        console.error(exception)
-      }
-    }
-    fetchedData()
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
     if (loggedUser) {
       const user = JSON.parse(loggedUser)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -39,24 +34,20 @@ const App = () => {
   const newLoggin = async (newUser) => {
     try {
       const user = await loginService.login(newUser)
-      setUser(user)
-      console.log(user)
+      dispatch(setUser(user))
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch (exception) {
-      setNotification({
-        message: 'Wrong username or password',
-        state: 'failed',
-      })
+      dispatch(setNot('Wrong username or password', 'failed'))
       setTimeout(() => {
-        setNotification({ message: null, state: null })
+        dispatch(setNot(null, null))
       }, 5000)
     }
   }
 
   const handleLogOut = () => {
     window.localStorage.clear()
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const createBlogRef = useRef()
@@ -65,45 +56,31 @@ const App = () => {
     try {
       createBlogRef.current.toggleVisible()
       const createdBlog = await blogService.createBlog(newBlog)
-      setBlogs(blogs.concat(createdBlog))
-      setNotification({
-        message: `Blog '${newBlog.title}' by '${newBlog.author}' successfully created`,
-        state: 'success',
-      })
+      dispatch(addBlog(createdBlog))
+      dispatch(
+        setNot(
+          `Blog '${newBlog.title}' by '${newBlog.author}' successfully created`,
+          'success',
+        ),
+      )
       setTimeout(() => {
-        setNotification({
-          message: null,
-          state: null,
-        })
+        dispatch(setNot(null, null))
       }, 5000)
     } catch (exception) {
       console.error(exception)
-      setNotification({
-        message: 'Blog could not be created.',
-        state: 'failed',
-      })
+      dispatch(setNot('Blog could not be created.', 'failed'))
       setTimeout(() => {
-        setNotification({
-          message: null,
-          state: null,
-        })
+        dispatch(setNot(null, null))
       }, 5000)
     }
   }
 
-  const updateBlog = async (id, newBlog) => {
+  const updateBlog = (id, newBlog) => {
     try {
-      const updatedBlog = blogService.updateBlog(id, newBlog)
-      const newBlogs = blogs.map((b) =>
-        b.id === updatedBlog.id ? updatedBlog : b,
-      )
-      setBlogs(newBlogs)
+      dispatch(upToDateBlogs(id, newBlog))
     } catch (exception) {
       console.error('There were an error in updatingBlog.')
-      setNotification({
-        message: 'We could not update the blog.',
-        state: 'failed',
-      })
+      dispatch(setNot('We could not update the blog.', 'failed'))
     }
   }
 
@@ -114,7 +91,7 @@ const App = () => {
       const newBlogs = blogs.filter((b) => {
         return b.id !== id
       })
-      setBlogs(newBlogs)
+      dispatch(initializeBlogs(newBlogs))
     } catch (exception) {
       console.error(exception)
     }

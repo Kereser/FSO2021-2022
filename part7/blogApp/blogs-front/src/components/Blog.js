@@ -22,9 +22,8 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const handleLikes = async () => {
     const newBlog = {
-      likes: (blog.likes += 1),
+      likes: blog.likes + 1,
     }
-
     updateBlog(blog.id, newBlog)
   }
 

@@ -2,7 +2,6 @@ import React from 'react'
 
 const Notification = ({ notification }) => {
   const { message, state } = notification
-
   if (message === null) {
     return null
   } else {
