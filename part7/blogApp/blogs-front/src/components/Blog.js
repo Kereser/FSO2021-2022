@@ -1,21 +1,23 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, updateBlog, removeBlog }) => {
+import { deleteBlog, upToDateBlogs } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
+
+const Blog = ({ blog }) => {
   const [show, setShow] = useState(false)
+  const dispatch = useDispatch()
 
   const loggedUser = window.localStorage.getItem('loggedUser')
   const user = JSON.parse(loggedUser)
 
   const handleElimination = () => {
     if (window.confirm(`Remove blog: ${blog.title} by '${blog.author}'`)) {
-      removeBlog(blog.id, user.token)
+      dispatch(deleteBlog(blog.id, user.token))
     }
   }
 
   const eliminationButton = () => {
-    console.log(user)
-    console.log(blog)
     if (user.username === blog.user.username) {
       return <button onClick={handleElimination}>Remove blog</button>
     }
@@ -26,7 +28,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
     const newBlog = {
       likes: blog.likes + 1,
     }
-    updateBlog(blog.id, newBlog)
+    dispatch(upToDateBlogs(blog.id, newBlog))
   }
 
   const styledBlog = {
@@ -81,8 +83,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 }
 
 Blog.propTypes = {
-  updateBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
+  blog: PropTypes.object.isRequired,
 }
 
 export default Blog

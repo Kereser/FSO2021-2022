@@ -5,11 +5,9 @@ import LoginForm from './components/LoginForm'
 import Toggleable from './components/Toggleable'
 import CreateBlog from './components/CreateBlog'
 import blogService from './services/blogs'
-import loginService from './services/login'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setNot } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs, upToDateBlogs } from './reducers/blogReducer'
+import { addBlog, initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
 
 const App = () => {
@@ -31,17 +29,6 @@ const App = () => {
     }
   }, [])
 
-  const newLoggin = async (newUser) => {
-    try {
-      const user = await loginService.login(newUser)
-      dispatch(setUser(user))
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-    } catch (exception) {
-      dispatch(setNot('Wrong username or password', 'failed', 5))
-    }
-  }
-
   const handleLogOut = () => {
     window.localStorage.clear()
     dispatch(setUser(null))
@@ -49,43 +36,9 @@ const App = () => {
 
   const createBlogRef = useRef()
 
-  const addNewBlog = async (newBlog) => {
-    try {
-      createBlogRef.current.toggleVisible()
-      dispatch(addBlog(newBlog))
-      dispatch(
-        setNot(
-          `Blog '${newBlog.title}' by '${newBlog.author}' successfully created`,
-          'success',
-          5,
-        ),
-      )
-    } catch (exception) {
-      console.error(exception)
-      dispatch(setNot('Blog could not be created.', 'failed', 5))
-    }
-  }
-
-  const updateBlog = (id, newBlog) => {
-    try {
-      dispatch(upToDateBlogs(id, newBlog))
-    } catch (exception) {
-      console.error('There were an error in updatingBlog.')
-      dispatch(setNot('We could not update the blog.', 'failed', 5))
-    }
-  }
-
-  const removeBlog = async (id, sendedToken) => {
-    try {
-      const token = blogService.setToken(sendedToken)
-      await blogService.removeBlog(id, token)
-      const newBlogs = blogs.filter((b) => {
-        return b.id !== id
-      })
-      dispatch(initializeBlogs(newBlogs))
-    } catch (exception) {
-      console.error(exception)
-    }
+  const addNewBlog = (newBlog) => {
+    createBlogRef.current.toggleVisible()
+    dispatch(addBlog(newBlog))
   }
 
   return (
@@ -93,7 +46,7 @@ const App = () => {
       <Notification notification={notification} />
       {user === null ? (
         <div>
-          <LoginForm newLoggin={newLoggin} />
+          <LoginForm />
         </div>
       ) : (
         <div>
@@ -104,11 +57,7 @@ const App = () => {
           <Toggleable ref={createBlogRef}>
             <CreateBlog createBlog={addNewBlog} />
           </Toggleable>
-          <Blogs
-            blogs={blogs}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
-          />
+          <Blogs blogs={blogs} />
         </div>
       )}
     </div>
