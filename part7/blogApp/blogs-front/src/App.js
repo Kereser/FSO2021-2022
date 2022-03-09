@@ -57,10 +57,10 @@ const App = () => {
         </div>
       ) : (
         <div>
-          <Link style={style} to="/">
+          <Link style={style} to='/'>
             Home
           </Link>
-          <Link style={style} to="/users">
+          <Link style={style} to='/users'>
             Usuarios
           </Link>
           <h2>blogs</h2>
@@ -69,9 +69,9 @@ const App = () => {
             <button onClick={handleLogOut}>Logout</button>
           </p>
           <Routes>
-            <Route path="/users" element={<Users />} />
+            <Route path='/users' element={<Users />} />
             <Route
-              path="/"
+              path='/'
               element={
                 <>
                   <Toggleable ref={createBlogRef}>
@@ -81,6 +81,7 @@ const App = () => {
                 </>
               }
             />
+            <Route path='/users/:id' element={<Users id={true} />} />
           </Routes>
         </div>
       )}
