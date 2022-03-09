@@ -40,9 +40,12 @@ const Users = () => {
     )
   }
 
+  if (users.length === 0) {
+    return null
+  }
+
   const userBlogs = users.find((u) => u.id === id)
 
-  console.log(userBlogs)
   return (
     <div>
       <h2 style={{ marginBottom: 0 }}>{userBlogs.name}</h2>

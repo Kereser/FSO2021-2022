@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Notification from './components/Notifications'
 import LoginForm from './components/LoginForm'
 import Toggleable from './components/Toggleable'
@@ -16,7 +16,6 @@ import { Link, Route, Routes } from 'react-router-dom'
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
-  const blogs = useSelector((state) => state.blogs)
   const login = useSelector((state) => state.login)
 
   useEffect(() => {
@@ -58,10 +57,10 @@ const App = () => {
       ) : (
         <div>
           <Link style={style} to='/'>
-            Home
+            Blogs
           </Link>
           <Link style={style} to='/users'>
-            Usuarios
+            Users
           </Link>
           <h2>blogs</h2>
           <p>
@@ -77,11 +76,12 @@ const App = () => {
                   <Toggleable ref={createBlogRef}>
                     <CreateBlog createBlog={addNewBlog} />
                   </Toggleable>
-                  <Blogs blogs={blogs} />
+                  <Blog />
                 </>
               }
             />
             <Route path='/users/:id' element={<Users id={true} />} />
+            <Route path='/blogs/:id' element={<Blog />} />
           </Routes>
         </div>
       )}
