@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
+import { Button, TextField, Typography } from '@mui/material'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+
 const CreateBlog = ({ createBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -23,11 +26,14 @@ const CreateBlog = ({ createBlog }) => {
 
   return (
     <div>
-      <h2>Create new Blog</h2>
+      <Typography component='h2' variant='h4' sx={{ marginTop: 2 }}>
+        Create new blog
+      </Typography>
       <form onSubmit={handleSubmit}>
         <div>
-          Title:
-          <input
+          <TextField
+            size='small'
+            label='Title'
             id='input-title'
             type='text'
             value={title}
@@ -35,8 +41,9 @@ const CreateBlog = ({ createBlog }) => {
           />
         </div>
         <div>
-          Author:
-          <input
+          <TextField
+            size='small'
+            label='Author'
             id='input-author'
             type='text'
             value={author}
@@ -44,17 +51,24 @@ const CreateBlog = ({ createBlog }) => {
           />
         </div>
         <div>
-          Url:
-          <input
+          <TextField
+            size='small'
+            label='Url'
             id='input-url'
             type='text'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id='button-createNote' type='Submit'>
+        <Button
+          color='success'
+          variant='contained'
+          type='Submit'
+          endIcon={<AddCircleOutlineIcon />}
+          sx={{ marginBottom: 2 }}
+        >
           Create
-        </button>
+        </Button>
       </form>
     </div>
   )

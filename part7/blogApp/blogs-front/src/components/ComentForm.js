@@ -1,6 +1,9 @@
 import blogService from '../services/blogs'
 import React, { useState } from 'react'
 
+import { Button, TextField } from '@mui/material'
+import SendIcon from '@mui/icons-material/Send'
+
 const CommentForm = ({ id, handleSub }) => {
   const [input, setInput] = useState('')
 
@@ -17,14 +20,29 @@ const CommentForm = ({ id, handleSub }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type='text'
-        onChange={({ target }) => setInput(target.value)}
-        value={input}
-      />
-      <button type='submit'>Add comment</button>
-    </form>
+    <>
+      <h2>Comments</h2>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          size='small'
+          label='Comments'
+          name='Comments'
+          id='my-input'
+          onChange={({ target }) => setInput(target.value)}
+          value={input}
+          sx={{ flexGrow: 1 }}
+        />
+        <Button
+          type='submit'
+          color='primary'
+          variant='contained'
+          size='medium'
+          endIcon={<SendIcon />}
+        >
+          Add
+        </Button>
+      </form>
+    </>
   )
 }
 

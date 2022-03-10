@@ -2,13 +2,19 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeUsers } from '../reducers/userReducer'
 import { Link, useParams } from 'react-router-dom'
+
 import {
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 
 const Users = () => {
@@ -23,21 +29,23 @@ const Users = () => {
   if (!id) {
     return (
       <TableContainer>
-        <Table size='small' sx={{ maxWidth: 550 }}>
+        <Table size='medium' sx={{ maxWidth: 550 }}>
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell>Blogs created</TableCell>
+              <TableCell sx={{ fontSize: 22 }}>Blogs created</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.map((u) => {
               return (
                 <TableRow key={u.id} hover={true}>
-                  <TableCell variant='body'>
+                  <TableCell variant='body' sx={{ fontSize: 17 }}>
                     <Link to={`/users/${u.id}`}>{u.name}</Link>
                   </TableCell>
-                  <TableCell>{u.blogs.length}</TableCell>
+                  <TableCell variant='body' sx={{ fontSize: 17 }}>
+                    {u.blogs.length}
+                  </TableCell>
                 </TableRow>
               )
             })}
@@ -55,13 +63,26 @@ const Users = () => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 0 }}>{userBlogs.name}</h2>
-      <p>Added Blogs</p>
-      <ul>
+      <Typography component='h2' variant='h3'>
+        {userBlogs.name}
+      </Typography>
+      <Typography
+        component='h4'
+        variant='h5'
+        sx={{ marginTop: 2, paddingLeft: 1 }}
+      >
+        Added Blogs
+      </Typography>
+      <List>
         {userBlogs.blogs.map((b) => (
-          <li key={b.id}>{b.title}</li>
+          <React.Fragment key={b.id}>
+            <ListItem>
+              <ListItemText>{b.title}</ListItemText>
+            </ListItem>
+            <Divider />
+          </React.Fragment>
         ))}
-      </ul>
+      </List>
     </div>
   )
 }

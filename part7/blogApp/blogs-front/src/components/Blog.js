@@ -6,6 +6,16 @@ import { useDispatch } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
+import RemoveButton from '../materialUIComponents/Tooltip/RemoveButton'
+import {
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+
 const Blog = () => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
@@ -26,9 +36,7 @@ const Blog = () => {
 
   const eliminationButton = (blog) => {
     if (user.username === blog.user.username) {
-      return (
-        <button onClick={() => handleElimination(blog)}>Remove blog</button>
-      )
+      return <RemoveButton onClick={() => handleElimination(blog)} />
     }
     return null
   }
@@ -42,37 +50,20 @@ const Blog = () => {
     }
   }
 
-  const styledBlog = {
-    paddingLeft: 2,
-    paddingTop: 3,
-    paddingBottom: 3,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 0,
-    marginTop: 4,
-  }
-
-  const pStyling = {
-    marginTop: 0,
-    marginBottom: 0,
-  }
-
   if (!id) {
     return (
-      <div>
+      <List>
         {sortedBlogs.map((b) => {
           return (
-            <Link
-              component={Link}
-              key={b.id}
-              style={styledBlog}
-              to={`/blogs/${b.id}`}
-            >
-              {b.title}
-            </Link>
+            <React.Fragment key={b.id}>
+              <ListItem button component={Link} to={`/blogs/${b.id}`}>
+                <ListItemText key={b.id}>{b.title}</ListItemText>
+              </ListItem>
+              <Divider />
+            </React.Fragment>
           )
         })}
-      </div>
+      </List>
     )
   }
 
@@ -85,23 +76,38 @@ const Blog = () => {
   }
   return (
     <div>
-      <h2>{blogToShow.title}</h2>
-      <p style={pStyling}>
-        <a href={blogToShow.url}>{blogToShow.url}</a>
-      </p>
-      <p style={pStyling}>
-        Likes: {blogToShow.likes}{' '}
-        <button onClick={handleLikes(blogToShow)}>Vote</button>
-      </p>
-      <p style={pStyling}>Added by {blogToShow.author}</p>
-      {eliminationButton(blogToShow)}
-      <h3>Comments</h3>
+      <List>
+        <h2>{blogToShow.title}</h2>
+        <ListItem button component='a' href={blogToShow.url}>
+          <ListItemText primary={blogToShow.url} />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText primary={`Likes: ${blogToShow.likes}`} />
+          <IconButton onClick={handleLikes(blogToShow)}>
+            <ThumbUpIcon />
+          </IconButton>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemText primary={`Added by ${blogToShow.author}`} />
+        </ListItem>
+        <Divider />
+        <ListItem>{eliminationButton(blogToShow)}</ListItem>
+      </List>
       <CommentForm id={blogToShow.id} handleSub={handleSubmit} />
-      <ul>
+      <List>
         {blogToShow.comments.map((comment, index) => {
-          return <li key={index}>{comment}</li>
+          return (
+            <React.Fragment key={index}>
+              <ListItem>
+                <ListItemText>{comment}</ListItemText>
+              </ListItem>
+              <Divider />
+            </React.Fragment>
+          )
         })}
-      </ul>
+      </List>
     </div>
   )
 }

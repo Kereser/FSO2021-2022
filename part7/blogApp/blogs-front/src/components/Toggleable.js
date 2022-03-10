@@ -1,3 +1,5 @@
+import { Button } from '@mui/material'
+
 import React, { useState, useImperativeHandle } from 'react'
 
 const Toggleable = React.forwardRef((props, ref) => {
@@ -19,11 +21,23 @@ const Toggleable = React.forwardRef((props, ref) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={() => setVisible(true)}>New Blogs</button>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => setVisible(true)}
+        >
+          New Blogs
+        </Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={() => setVisible(false)}>Cancel</button>
+        <Button
+          variant='contained'
+          color='error'
+          onClick={() => setVisible(false)}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   )
