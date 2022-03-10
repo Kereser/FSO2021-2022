@@ -111,7 +111,6 @@ const CreateNew = ({ addNew, setNotification }) => {
       </form>
     </div>
   )
-
 }
 
 const App = () => {

@@ -1,8 +1,9 @@
-import React from 'react'
+import * as React from 'react'
+import CommentForm from './ComentForm'
 
-import { upToDateBlogs, deleteBlog } from '../reducers/blogReducer'
+import { upToDateBlogs, deleteBlog, updateBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Blog = () => {
@@ -58,12 +59,17 @@ const Blog = () => {
 
   if (!id) {
     return (
-      <div className='blogInfo'>
+      <div>
         {sortedBlogs.map((b) => {
           return (
-            <p key={b.id} style={styledBlog}>
-              <Link to={`/blogs/${b.id}`}>{b.title}</Link>
-            </p>
+            <Link
+              component={Link}
+              key={b.id}
+              style={styledBlog}
+              to={`/blogs/${b.id}`}
+            >
+              {b.title}
+            </Link>
           )
         })}
       </div>
@@ -74,7 +80,9 @@ const Blog = () => {
 
   const blogToShow = blogs.find((b) => b.id === id)
 
-  console.log(blogToShow)
+  const handleSubmit = (newBlog) => {
+    dispatch(updateBlog(newBlog))
+  }
   return (
     <div>
       <h2>{blogToShow.title}</h2>
@@ -87,6 +95,13 @@ const Blog = () => {
       </p>
       <p style={pStyling}>Added by {blogToShow.author}</p>
       {eliminationButton(blogToShow)}
+      <h3>Comments</h3>
+      <CommentForm id={blogToShow.id} handleSub={handleSubmit} />
+      <ul>
+        {blogToShow.comments.map((comment, index) => {
+          return <li key={index}>{comment}</li>
+        })}
+      </ul>
     </div>
   )
 }

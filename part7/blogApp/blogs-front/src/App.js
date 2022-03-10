@@ -11,7 +11,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addBlog, initializeBlogs } from './reducers/blogReducer'
 import { setLogin } from './reducers/loginReducer'
 
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+
+import {
+  Container,
+  AppBar,
+  Toolbar,
+  Box,
+  Button,
+  Typography,
+} from '@mui/material'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -43,49 +52,61 @@ const App = () => {
     dispatch(addBlog(newBlog))
   }
 
-  const style = {
-    padding: 5,
-  }
+  // const style = {
+  //   padding: 5,
+  // }
 
   return (
-    <div>
-      <Notification notification={notification} />
-      {login === null ? (
-        <div>
-          <LoginForm />
-        </div>
-      ) : (
-        <div>
-          <Link style={style} to='/'>
-            Blogs
-          </Link>
-          <Link style={style} to='/users'>
-            Users
-          </Link>
-          <h2>blogs</h2>
-          <p>
-            {login.name} logged in{' '}
-            <button onClick={handleLogOut}>Logout</button>
-          </p>
-          <Routes>
-            <Route path='/users' element={<Users />} />
-            <Route
-              path='/'
-              element={
-                <>
-                  <Toggleable ref={createBlogRef}>
-                    <CreateBlog createBlog={addNewBlog} />
-                  </Toggleable>
-                  <Blog />
-                </>
-              }
-            />
-            <Route path='/users/:id' element={<Users id={true} />} />
-            <Route path='/blogs/:id' element={<Blog />} />
-          </Routes>
-        </div>
-      )}
-    </div>
+    <Container>
+      <div>
+        <Notification notification={notification} />
+        {login === null ? (
+          <div>
+            <LoginForm />
+          </div>
+        ) : (
+          <div>
+            <AppBar>
+              <Toolbar>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Button color='inherit' href='/'>
+                    Blogs
+                  </Button>
+                  <Button color='inherit' href='/users'>
+                    Users
+                  </Button>
+                </Box>
+                <Typography>
+                  {login.name} logged in{' '}
+                  <Button onClick={handleLogOut} color='inherit'>
+                    Logout
+                  </Button>
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Box>
+              <h2 style={{ marginTop: 72 }}>blogs</h2>
+              <Routes>
+                <Route path='/users' element={<Users />} />
+                <Route
+                  path='/'
+                  element={
+                    <>
+                      <Toggleable ref={createBlogRef}>
+                        <CreateBlog createBlog={addNewBlog} />
+                      </Toggleable>
+                      <Blog />
+                    </>
+                  }
+                />
+                <Route path='/users/:id' element={<Users id={true} />} />
+                <Route path='/blogs/:id' element={<Blog />} />
+              </Routes>
+            </Box>
+          </div>
+        )}
+      </div>
+    </Container>
   )
 }
 

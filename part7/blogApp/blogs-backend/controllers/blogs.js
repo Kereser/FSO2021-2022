@@ -40,6 +40,18 @@ blogsRouter.post('/', async (req, res) => {
   res.status(201).json(populatedSavedBlog.toJSON())
 })
 
+blogsRouter.post('/:id/comments', async (req, res) => {
+  const body = req.body
+
+  const blogToUpdate = await Blog.findById(req.params.id)
+  console.log(blogToUpdate)
+  blogToUpdate.comments = blogToUpdate.comments.concat(body.comment)
+  console.log(blogToUpdate)
+  await blogToUpdate.save()
+
+  res.json(blogToUpdate.toJSON())
+})
+
 blogsRouter.put('/:id', async (req, res) => {
   const body = req.body
 
