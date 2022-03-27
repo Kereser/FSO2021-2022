@@ -1,0 +1,1 @@
+![Certifcate image](https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/f236f46c98063c0c5b6db738bb9320c4)
